@@ -42,7 +42,7 @@ async def fetch_songs(payload):
                     if song_name:
                         songs.append({
                             "month": month,
-                            "songName": song_name,
+                            "name": song_name,
                             "artist": artist_name,
                             "imageUrl": image_url if image_url else "",
                             "scrobbles": scrobbles if scrobbles else "0"
@@ -52,7 +52,7 @@ async def fetch_songs(payload):
                     print(f"Failed to fetch data for {month}: {e}")
                     songs.append({
                         "month": month,
-                        "songName": "",
+                        "name": "",
                         "artist": "",
                         "imageUrl": "",
                         "scrobbles": ""

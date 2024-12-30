@@ -17,7 +17,7 @@ async def fetch_albums(payload):
     albums = []
 
     async with async_playwright() as p:
-        browser = await p.chromium.launch(headless=False)
+        browser = await p.chromium.launch(headless=True)
         page = await browser.new_page()
 
         try:
@@ -58,7 +58,7 @@ async def fetch_albums(payload):
                     if album_name:
                         albums.append({
                             "month": month,
-                            "albumName": album_name,
+                            "name": album_name,
                             "artist": artist_name,
                             "imageUrl": image_url if image_url else "",
                             "scrobbles": scrobbles if scrobbles else "0"
@@ -68,7 +68,7 @@ async def fetch_albums(payload):
                     print(f"Failed to fetch data for {month}: {e}")
                     albums.append({
                         "month": month,
-                        "albumName": "",
+                        "name": "",
                         "artist": "",
                         "imageUrl": "",
                         "scrobbles": ""
