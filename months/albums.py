@@ -37,7 +37,7 @@ async def fetch_albums(payload):
                     album_name = await album_row.locator('.chartlist-name a').get_attribute('title')
                     artist_name = await album_row.locator('.chartlist-artist a').get_attribute('title')
                     scrobbles = await album_row.locator('.chartlist-bar .chartlist-count-bar-value').inner_text()
-
+                    scrobblesQty = int(scrobbles.split()[0]) if scrobbles else 0
                     album_link = await album_row.locator('.chartlist-name a').get_attribute('href')
                     full_album_url = f"https://www.last.fm{album_link}"
                     image_url = ""
@@ -61,7 +61,7 @@ async def fetch_albums(payload):
                             "name": album_name,
                             "artist": artist_name,
                             "imageUrl": image_url if image_url else "",
-                            "scrobbles": scrobbles if scrobbles else "0"
+                            "scrobbles": scrobblesQty,
                         })
 
                 except Exception as e:
@@ -71,7 +71,7 @@ async def fetch_albums(payload):
                         "name": "",
                         "artist": "",
                         "imageUrl": "",
-                        "scrobbles": ""
+                        "scrobbles": 0
                     })
 
         except Exception as e:

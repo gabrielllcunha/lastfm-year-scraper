@@ -36,14 +36,14 @@ async def fetch_singers(payload):
                     singer_row = page.locator('tbody[data-chart-date-range] > tr:first-child')
                     singer_name = await singer_row.locator('.chartlist-name a').get_attribute('title')
                     scrobbles = await singer_row.locator('.chartlist-bar .chartlist-count-bar-value').inner_text()
+                    scrobblesQty = int(scrobbles.split()[0]) if scrobbles else 0
                     image_url = await singer_row.locator('.chartlist-image img').get_attribute('src')
-
                     if singer_name:
                         singers.append({
                             "month": month,
                             "name": singer_name,
                             "imageUrl": image_url if image_url else "",
-                            "scrobbles": scrobbles if scrobbles else "0"
+                            "scrobbles": scrobblesQty,
                         })
 
                 except Exception as e:
@@ -53,7 +53,7 @@ async def fetch_singers(payload):
                         "name": "",
                         "artist": "",
                         "imageUrl": "",
-                        "scrobbles": ""
+                        "scrobbles": 0
                     })
 
         except Exception as e:

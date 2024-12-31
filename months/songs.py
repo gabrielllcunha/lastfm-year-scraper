@@ -37,15 +37,15 @@ async def fetch_songs(payload):
                     song_name = await song_row.locator('.chartlist-name a').get_attribute('title')
                     artist_name = await song_row.locator('.chartlist-artist a').get_attribute('title')
                     scrobbles = await song_row.locator('.chartlist-bar .chartlist-count-bar-value').inner_text()
+                    scrobblesQty = int(scrobbles.split()[0]) if scrobbles else 0
                     image_url = await song_row.locator('.chartlist-image img').get_attribute('src')
-
                     if song_name:
                         songs.append({
                             "month": month,
                             "name": song_name,
                             "artist": artist_name,
                             "imageUrl": image_url if image_url else "",
-                            "scrobbles": scrobbles if scrobbles else "0"
+                            "scrobbles": scrobblesQty,
                         })
 
                 except Exception as e:
@@ -55,7 +55,7 @@ async def fetch_songs(payload):
                         "name": "",
                         "artist": "",
                         "imageUrl": "",
-                        "scrobbles": ""
+                        "scrobbles": 0
                     })
 
         except Exception as e:
