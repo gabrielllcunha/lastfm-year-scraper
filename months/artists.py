@@ -1,6 +1,6 @@
 from playwright.async_api import async_playwright
 
-async def fetch_singers(payload):
+async def fetch_artists(payload):
     username = payload.get("username")
     password = payload.get("password")
     year = int(payload.get("year"))
@@ -14,7 +14,7 @@ async def fetch_singers(payload):
         "January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ]
-    singers = []
+    artists = []
 
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
@@ -33,22 +33,22 @@ async def fetch_singers(payload):
 
                 try:
                     await page.wait_for_selector('tbody[data-chart-date-range]', timeout=10000)
-                    singer_row = page.locator('tbody[data-chart-date-range] > tr:first-child')
-                    singer_name = await singer_row.locator('.chartlist-name a').get_attribute('title')
-                    scrobbles = await singer_row.locator('.chartlist-bar .chartlist-count-bar-value').inner_text()
+                    artist_row = page.locator('tbody[data-chart-date-range] > tr:first-child')
+                    artist_name = await artist_row.locator('.chartlist-name a').get_attribute('title')
+                    scrobbles = await artist_row.locator('.chartlist-bar .chartlist-count-bar-value').inner_text()
                     scrobblesQty = int(scrobbles.split()[0]) if scrobbles else 0
-                    image_url = await singer_row.locator('.chartlist-image img').get_attribute('src')
-                    if singer_name:
-                        singers.append({
+                    image_url = await artist_row.locator('.chartlist-image img').get_attribute('src')
+                    if artist_name:
+                        artists.append({
                             "month": month,
-                            "name": singer_name,
+                            "name": artist_name,
                             "imageUrl": image_url if image_url else "",
                             "scrobbles": scrobblesQty,
                         })
 
                 except Exception as e:
                     print(f"Failed to fetch data for {month}: {e}")
-                    singers.append({
+                    artists.append({
                         "month": month,
                         "name": "",
                         "artist": "",
@@ -61,4 +61,4 @@ async def fetch_singers(payload):
         finally:
             await browser.close()
 
-    return singers
+    return artists

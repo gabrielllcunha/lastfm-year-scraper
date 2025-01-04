@@ -2,7 +2,7 @@ import asyncio
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from months.albums import fetch_albums
-from months.singers import fetch_singers
+from months.artists import fetch_artists
 from months.songs import fetch_songs
 
 app = Flask(__name__)
@@ -22,11 +22,11 @@ def fetch_albums_by_month():
         return jsonify({"error": str(e)}), 500
 
 
-@app.route("/fetch-singers-by-month", methods=["POST"])
-def fetch_singers_by_month():
+@app.route("/fetch-artists-by-month", methods=["POST"])
+def fetch_artists_by_month():
     data = request.get_json()
     try:
-        result = asyncio.run(fetch_singers(data))
+        result = asyncio.run(fetch_artists(data))
         return jsonify(result), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
